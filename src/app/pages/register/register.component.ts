@@ -5,10 +5,11 @@ import { MaterialModule } from '../../shared/material.module';
 import { UserService } from '../../core/service/user.service';
 import { Register } from '../../core/models/Register';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, MaterialModule],
+  imports: [CommonModule, MaterialModule, RouterLink],
   templateUrl: './register.component.html',
   standalone: true,
   styleUrl: './register.component.css'
@@ -19,6 +20,8 @@ export class RegisterComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   registerForm: FormGroup = new FormGroup({});
   submitted: boolean = false;
+
+  constructor(private router: Router) { }
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group(
@@ -51,7 +54,7 @@ export class RegisterComponent implements OnInit {
       .subscribe(
       () => {
         alert('SUCCESS!! :-)');
-        // TODO : router l'utilisateur vers la page de login
+        this.router.navigateByUrl('/login');
       },
     );
   }
