@@ -1,0 +1,73 @@
+@if (isCreating || !currentStudent || !currentStudent.id) {
+  @if (isCreating) {
+    <!-- MODE CREATION -->
+    <div class="edit-form">
+      <h4>Ajouter un étudiant</h4>
+      <form [formGroup]="studentForm" (ngSubmit)="createStudent()">
+        <div class="form-group">
+          <label>Prénom</label>
+          <input class="form-control" formControlName="firstName" />
+        </div>
+        <div class="form-group">
+          <label>Nom</label>
+          <input class="form-control" formControlName="lastName" />
+        </div>
+        <div class="form-group">
+          <label>Login</label>
+          <input class="form-control" formControlName="login" />
+        </div>
+        <button type="submit" [disabled]="studentForm.invalid" class="m-3 btn btn-sm btn-success">
+          Créer
+        </button>
+        <button type="button" class="m-3 btn btn-sm btn-secondary" (click)="cancelEdit()">
+          Annuler
+        </button>
+      </form>
+    </div>
+  } @else {
+    <p>Sélectionnez un étudiant pour afficher/modifier ses détails ou le supprimer ...</p>
+  }
+} @else {
+
+  <!-- MODE LECTURE -->
+  @if (!isEditing) {
+    <h4>Étudiant {{ currentStudent.id }}</h4>
+    <div><strong>Prénom:</strong> {{ currentStudent.firstName }}</div>
+    <div><strong>Nom:</strong> {{ currentStudent.lastName }}</div>
+    <div><strong>Login:</strong> {{ currentStudent.login }}</div>
+    <button class="m-3 btn btn-sm btn-warning"
+            (click)="enableEdit()">
+      Modifier
+    </button>
+    <button class="m-3 btn btn-sm btn-danger" (click)="deleteStudent()">
+      Supprimer
+    </button>
+  }
+  <!-- MODE EDITION -->
+  @else {
+    <div class="edit-form">
+      <h4>Modifier étudiant {{ currentStudent.id }}</h4>
+      <form [formGroup]="studentForm" (ngSubmit)="updateStudent()">
+        <div class="form-group">
+          <label>Prénom</label>
+          <input class="form-control" formControlName="firstName" />
+        </div>
+        <div class="form-group">
+          <label>Nom</label>
+          <input class="form-control" formControlName="lastName" />
+        </div>
+        <div class="form-group">
+          <label>Login</label>
+          <input class="form-control" formControlName="login" />
+        </div>
+        <button type="submit" [disabled]="studentForm.invalid" class="m-3 btn btn-sm btn-success">
+          Enregistrer
+        </button>
+        <button type="button" class="m-3 btn btn-sm btn-secondary" (click)="cancelEdit()">
+          Annuler
+        </button>
+      </form>
+    </div>
+  }
+}
+<p>{{ message }}</p>

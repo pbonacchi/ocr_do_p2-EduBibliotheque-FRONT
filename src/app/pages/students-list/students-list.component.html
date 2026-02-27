@@ -1,0 +1,25 @@
+<div class="list row">
+  <div class="col-md-6">
+    <h4>Students List</h4>
+    <ul class="list-group">
+      @for (student of students; track student.id; let i = $index) {
+      <li class="list-group-item"
+        [class.active]="i == currentIndex"
+        (click)="setActiveStudent(student, i)">
+        {{ student.lastName }}, {{ student.firstName }}
+      </li>
+      }
+    </ul>
+
+    <button class="m-3 btn btn-sm btn-danger" (click)="startCreatingStudent()">
+      Ajouter un étudiant
+    </button>
+  </div>
+  <div class="col-md-6">
+    <app-student-details
+      [currentStudent]="currentStudent"
+      [isCreating]="isCreatingStudent"
+      (createCancelled)="isCreatingStudent = false"
+    ></app-student-details>
+  </div>
+</div>

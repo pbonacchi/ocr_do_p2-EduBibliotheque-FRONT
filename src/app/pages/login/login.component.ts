@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { UserService } from '../../core/service/user.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Login } from '../../core/models/Login';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../core/security/auth.service';
 
 @Component({
@@ -21,14 +21,25 @@ export class LoginComponent implements OnInit {
   loading: boolean = false;
   errorMessage: string | null = null;
   successMessage: string | null = null;
+  returnUrl: string | null = null;
   
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit() {
+    // capture any return URL from query params (used by the guard)
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || null;
+
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/ma-bibli']);
+      // already authenticated, just go to requested page or default
+      const dest = this.returnUrl || '/ma-bibli';
+      this.router.navigateByUrl(dest);
       return;
     }
+
     this.loginForm = this.formBuilder.group(
       {
         login: ['', Validators.required],
@@ -59,8 +70,11 @@ export class LoginComponent implements OnInit {
     this.authService.login(loginUser)
       .subscribe({
         next: () => {
-          this.successMessage = 'Authentification réussie, vous allez être redirigé·e vers votre bibliothèque...';
-          setTimeout(() => this.router.navigate(['/ma-bibli']), 2000);
+          this.successMessage = 'Authentification réussie, vous allez être redirigé·e vers votre destination...';
+          setTimeout(() => {
+            const dest = this.returnUrl || '/ma-bibli';
+            this.router.navigateByUrl(dest);
+          }, 2000);
         },
         error: (err) => {
           const msg = err && err.error && err.error.message ? err.error.message : 'Erreur pendant l\'authentification.';

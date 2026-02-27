@@ -9,6 +9,11 @@ export class AuthGuard implements CanActivate {
   constructor(private auth: AuthService, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
-    return this.auth.isLoggedIn() ? true : this.router.parseUrl('/login');
+    if (this.auth.isLoggedIn()) {
+      return true;
+    }
+    // utilisateur non authentifié => redirection vers login page en l'informant de l'URL demandée par l'utilisateur.
+    // utilisation de createUrlTree pour encodage correct des params et éviter les problèmes de double encodage
+    return this.router.createUrlTree(['/login'], { queryParams: { returnUrl: state.url } });
   }
 }
