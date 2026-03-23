@@ -33,7 +33,7 @@ describe('authInterceptor', () => {
     const req = new HttpRequest('GET', '/foo');
 
     const next = (r: HttpRequest<any>) => {
-      expect(r.headers.has('Authorization')).toBeFalse();
+      expect(r.headers.has('Authorization')).toBe(false);
       return of(null);
     };
 
