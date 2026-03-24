@@ -22,7 +22,7 @@ Ce document décrit le plan de tests unitaires/intégration légère frontend po
 
 ### Exclu
 
-- Tests E2E (Cypress, Playwright) -> traités ultérieurement.
+- Tests E2E (Cypress, Playwright) -> à traiter.
 - Tests backend (controllers, persistence, sécurité serveur).
 - Intégration complète avec serveur réel.
 - Tests de performance frontend, charge, sécurité dynamique.
